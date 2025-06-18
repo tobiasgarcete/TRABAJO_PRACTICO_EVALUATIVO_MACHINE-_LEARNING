@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Predicción de Estrés</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .resultado {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .bajo { color: green; }
+    .medio { color: orange; }
+    .alto { color: red; }
+
+    /* Barra de progreso */
+    .barra {
+      margin-top: 15px;
+      width: 100%;
+      height: 25px;
+      background-color: #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .barra-progreso {
+      height: 100%;
+      width: 0%;
+      text-align: center;
+      color: white;
+      line-height: 25px;
+      font-weight: bold;
+      transition: width 0.5s;
+      border-radius: 12px;
+    }
+    .barra-bajo { background-color: green; }
+    .barra-medio { background-color: orange; }
+    .barra-alto { background-color: red; }
+  </style>
+</head>
+<body>
+
+<h1>Predicción de Estrés</h1>
+
+<form id="formEstres">
+  <label>Sueño (horas): <input type="number" step="0.1" name="sueno_horas" required></label><br>
+  <label>Café (tazas): <input type="number" name="cafe_tazas" required></label><br>
+  <label>Ejercicio (min): <input type="number" name="ejercicio_min" required></label><br>
+  <label>Horas frente a pantallas: <input type="number" step="0.1" name="pantallas_horas" required></label><br>
+  <label>Horas de estudio: <input type="number" step="0.1" name="estudio_horas" required></label><br>
+  <label>Comida chatarra (veces): <input type="number" name="comida_chatarra" required></label><br>
+  <button type="submit">Predecir</button>
+</form>
+
+<div id="resultado" class="resultado"></div>
+
+<div class="barra" id="barraNivel" style="display:none;">
+  <div id="barraProgreso" class="barra-progreso"></div>
+</div>
+
+<script>
+  const form = document.getElementById('formEstres');
+  const resultadoDiv = document.getElementById('resultado');
+  const barraNivel = document.getElementById('barraNivel');
+  const barraProgreso = document.getElementById('barraProgreso');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    resultadoDiv.textContent = 'Calculando...';
+    barraNivel.style.display = 'none';
+
+    // Crear objeto con los datos del formulario
+    const data = {
+      sueno_horas: parseFloat(form.sueno_horas.value),
+      cafe_tazas: parseInt(form.cafe_tazas.value),
+      ejercicio_min: parseInt(form.ejercicio_min.value),
+      pantallas_horas: parseFloat(form.pantallas_horas.value),
+      estudio_horas: parseFloat(form.estudio_horas.value),
+      comida_chatarra: parseInt(form.comida_chatarra.value),
+    };
+
+    try {
+      const res = await fetch('http://127.0.0.1:8000/predecir_estres/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error('Error en la petición');
+
+      const json = await res.json();
+
+      // Extraer nivel predicho y código
+      const nivel = json.nivel_predicho.descripcion;
+      const codigo = json.nivel_predicho.codigo;
+      const score = json.score_calculado;
+
+      // Definir estilos y emoji según nivel
+      let clase, emoji, anchoBarra;
+      if (codigo === 0) {
+        clase = 'bajo';
+        emoji = '🟢';
+        anchoBarra = 33;
+      } else if (codigo === 1) {
+        clase = 'medio';
+        emoji = '⚠️';
+        anchoBarra = 66;
+      } else if (codigo === 2) {
+        clase = 'alto';
+        emoji = '🔴';
+        anchoBarra = 100;
+      } else {
+        clase = '';
+        emoji = '';
+        anchoBarra = 0;
+      }
+
+      resultadoDiv.className = `resultado ${clase}`;
+      resultadoDiv.textContent = `Nivel predicho: ${nivel} ${emoji} | Score calculado: ${score}`;
+
+      // Mostrar barra y animar ancho
+      barraNivel.style.display = 'block';
+      barraProgreso.className = `barra-progreso barra-${clase}`;
+      barraProgreso.style.width = anchoBarra + '%';
+      barraProgreso.textContent = nivel;
+
+    } catch (error) {
+      resultadoDiv.textContent = 'Error al obtener predicción.';
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
+</html>
