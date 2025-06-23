@@ -1,41 +1,18 @@
-# Predicción de Estrés - Proyecto ML con FastAPI y Frontend
+# Predicción de Nivel de Estrés en Estudiantes
 
-Este proyecto es una aplicación web para predecir el nivel de estrés en estudiantes a partir de sus hábitos diarios. Usa un modelo de Machine Learning servido con FastAPI y un frontend simple para mostrar resultados con colores, emojis y un gráfico visual.
+Este proyecto es una aplicación web desarrollada con **FastAPI** que predice el nivel de estrés en estudiantes a partir de hábitos diarios como horas de sueño, actividad física, alimentación, entre otros.
 
----
+## 🧠 Descripción
 
-## Estructura
+El objetivo es ayudar a identificar posibles niveles de estrés a través de un modelo de machine learning entrenado con un dataset relevante, y mostrar visualmente el resultado al usuario mediante una interfaz simple.
 
-- `estres_api.py`: Archivo backend con FastAPI que expone el endpoint `/predecir_estres/` para recibir datos y devolver la predicción.
-- `index.html`: Página web con formulario para ingresar hábitos, que consume la API y muestra resultados.
+## 🚀 Tecnologías utilizadas
 
----
+- [FastAPI](https://fastapi.tiangolo.com/) – Framework backend
+- [Scikit-learn](https://scikit-learn.org/) – Entrenamiento del modelo
+- [Uvicorn](https://www.uvicorn.org/) – Servidor ASGI para correr la API
+- HTML + JS (Frontend simple)
+- Pandas y NumPy – Procesamiento de datos
 
-## Requisitos previos
+## 🗂️ Estructura del proyecto
 
-- Python 3.8+
-- Node.js o servidor web estático para servir el frontend (puede ser live-server o simplemente abrir `index.html` en navegador)
-- `uvicorn` para correr FastAPI
-
----
-
-## Instalación y ejecución
-
-1. Clona este repositorio o descarga los archivos.
-
-2. Instala las dependencias de Python:
-
-```bash
-pip install fastapi uvicorn fastapi scikit-learn
-```
-## Ejecuta el servidor FastAPI:
-
-python -m uvicorn estres_api:app --reload
-
-
-## 👤 Autor
-Trabajo práctico evaluativo - Machine Learning
-Alumno: [Tobias Garcete Lionel
-         Acosta Mirko Josue Ian]
-Profesor/a: [Gabriel Acosta
-             Agustin Mazza]
