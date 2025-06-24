@@ -14,5 +14,27 @@ El objetivo es ayudar a identificar posibles niveles de estrés a través de un 
 - HTML + JS (Frontend simple)
 - Pandas y NumPy – Procesamiento de datos
 
-## 🗂️ Estructura del proyecto
 
+## ⚙️ Instalación y ejecución
+
+1. Clona el repositorio:
+
+```bash
+git clone https://github.com/tu-usuario/tu-repo.git
+cd trabajo_final_grupal_python
+```
+## Crea y activa un entorno virtual:
+
+bash
+python -m venv .venv
+.venv\Scripts\activate    En Windows
+
+## Instala las dependencias:
+
+bash
+pip install -r requirements.txt
+
+## Ejecuta el servidor:
+
+bash
+python -m uvicorn app:app --reload
